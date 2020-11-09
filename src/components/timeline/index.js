@@ -7,9 +7,9 @@
 import * as React from 'react';
 import explicitConnect from '../../utils/connect';
 import { getTimelineTrackOrganization } from 'firefox-profiler/selectors';
-import FullTimeline from '../timeline/FullTimeline';
-import ActiveTabTimeline from '../timeline/ActiveTabTimeline';
-import OriginsTimelineView from '../timeline/OriginsTimeline';
+import { FullTimeline } from '../timeline/FullTimeline';
+import { ActiveTabTimeline } from '../timeline/ActiveTabTimeline';
+import { OriginsTimelineView } from '../timeline/OriginsTimeline';
 import { assertExhaustiveCheck } from '../../utils/flow';
 
 import type { ConnectedProps } from '../../utils/connect';

@@ -6,10 +6,10 @@
 
 import * as React from 'react';
 import { showMenu } from 'react-contextmenu';
-import TimelineGlobalTrack from './GlobalTrack';
-import TimelineRuler from './Ruler';
-import TimelineSelection from './Selection';
-import OverflowEdgeIndicator from './OverflowEdgeIndicator';
+import { GlobalTrackComponent } from './GlobalTrack';
+import { Ruler } from './Ruler';
+import { Selection } from './Selection';
+import { OverflowEdgeIndicator } from './OverflowEdgeIndicator';
 import Reorderable from '../shared/Reorderable';
 import { withSize } from '../shared/WithSize';
 import explicitConnect from '../../utils/connect';
@@ -30,7 +30,7 @@ import {
   TIMELINE_MARGIN_RIGHT,
   TIMELINE_SETTINGS_HEIGHT,
 } from '../../app-logic/constants';
-import TimelineTrackContextMenu from './TrackContextMenu';
+import { TrackContextMenu } from './TrackContextMenu';
 
 import './index.css';
 
@@ -211,7 +211,7 @@ class TimelineSettingsActiveTabView extends React.PureComponent<{|
   }
 }
 
-class FullTimeline extends React.PureComponent<Props, State> {
+class FullTimelineImpl extends React.PureComponent<Props, State> {
   state = {
     initialSelected: null,
   };
@@ -275,8 +275,8 @@ class FullTimeline extends React.PureComponent<Props, State> {
             />
           )}
         </div>
-        <TimelineSelection width={timelineWidth}>
-          <TimelineRuler
+        <Selection width={timelineWidth}>
+          <Ruler
             zeroAt={zeroAt}
             rangeStart={committedRange.start}
             rangeEnd={committedRange.end}
@@ -296,7 +296,7 @@ class FullTimeline extends React.PureComponent<Props, State> {
               onChangeOrder={changeGlobalTrackOrder}
             >
               {globalTracks.map((globalTrack, trackIndex) => (
-                <TimelineGlobalTrack
+                <GlobalTrackComponent
                   key={trackIndex}
                   trackIndex={trackIndex}
                   trackReference={globalTrackReferences[trackIndex]}
@@ -305,14 +305,14 @@ class FullTimeline extends React.PureComponent<Props, State> {
               ))}
             </Reorderable>
           </OverflowEdgeIndicator>
-        </TimelineSelection>
-        <TimelineTrackContextMenu />
+        </Selection>
+        <TrackContextMenu />
       </>
     );
   }
 }
 
-export default explicitConnect<{||}, StateProps, DispatchProps>({
+export const FullTimeline = explicitConnect<{||}, StateProps, DispatchProps>({
   mapStateToProps: state => ({
     globalTracks: getGlobalTracks(state),
     globalTrackOrder: getGlobalTrackOrder(state),
@@ -331,5 +331,5 @@ export default explicitConnect<{||}, StateProps, DispatchProps>({
     changeRightClickedTrack,
     changeTimelineTrackOrganization,
   },
-  component: withSize<Props>(FullTimeline),
+  component: withSize<Props>(FullTimelineImpl),
 });

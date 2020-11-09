@@ -12,8 +12,8 @@ import { getIsActiveTabResourcesPanelOpen } from '../../selectors/url-state';
 import { getActiveTabResourcesThreadsKey } from '../../selectors/profile';
 import { toggleResourcesPanel } from '../../actions/app';
 import { ACTIVE_TAB_TIMELINE_RESOURCES_HEADER_HEIGHT } from '../../app-logic/constants';
-import ActiveTabTimelineResourceTrack from './ActiveTabResourceTrack';
-import TrackThread from './TrackThread';
+import { ActiveTabResourceTrackComponent } from './ActiveTabResourceTrack';
+import { TrackThread } from './TrackThread';
 
 import type { SizeProps } from '../shared/WithSize';
 import type {
@@ -45,7 +45,7 @@ type Props = {|
   ...ConnectedProps<OwnProps, StateProps, DispatchProps>,
 |};
 
-class ActiveTabResourcesPanel extends React.PureComponent<Props> {
+class ActiveTabResourcesPanelImpl extends React.PureComponent<Props> {
   render() {
     const {
       resourceTracks,
@@ -77,7 +77,7 @@ class ActiveTabResourcesPanel extends React.PureComponent<Props> {
         {isActiveTabResourcesPanelOpen ? (
           <ol className="timelineResourceTracks">
             {resourceTracks.map((resourceTrack, trackIndex) => (
-              <ActiveTabTimelineResourceTrack
+              <ActiveTabResourceTrackComponent
                 key={trackIndex}
                 resourceTrack={resourceTrack}
                 trackIndex={trackIndex}
@@ -91,11 +91,15 @@ class ActiveTabResourcesPanel extends React.PureComponent<Props> {
   }
 }
 
-export default explicitConnect<OwnProps, StateProps, DispatchProps>({
+export const ActiveTabResourcesPanel = explicitConnect<
+  OwnProps,
+  StateProps,
+  DispatchProps
+>({
   mapStateToProps: state => ({
     isActiveTabResourcesPanelOpen: getIsActiveTabResourcesPanelOpen(state),
     resourcesThreadsKey: getActiveTabResourcesThreadsKey(state),
   }),
   mapDispatchToProps: { toggleResourcesPanel },
-  component: withSize<Props>(ActiveTabResourcesPanel),
+  component: withSize<Props>(ActiveTabResourcesPanelImpl),
 });

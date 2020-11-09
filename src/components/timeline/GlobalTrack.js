@@ -30,9 +30,9 @@ import {
 } from '../../selectors/profile';
 import { getThreadSelectors } from '../../selectors/per-thread';
 import './Track.css';
-import TimelineTrackThread from './TrackThread';
-import TimelineTrackScreenshots from './TrackScreenshots';
-import TimelineLocalTrack from './LocalTrack';
+import { TrackThread } from './TrackThread';
+import { TrackScreenshots } from './TrackScreenshots';
+import { LocalTrackComponent } from './LocalTrack';
 import { TrackVisualProgress } from './TrackVisualProgress';
 import Reorderable from '../shared/Reorderable';
 import { TRACK_PROCESS_BLANK_HEIGHT } from '../../app-logic/constants';
@@ -80,7 +80,7 @@ type DispatchProps = {|
 
 type Props = ConnectedProps<OwnProps, StateProps, DispatchProps>;
 
-class GlobalTrackComponent extends PureComponent<Props> {
+class GlobalTrackComponentImpl extends PureComponent<Props> {
   _container: HTMLElement | null = null;
   _isInitialSelectedPane: boolean | null = null;
 
@@ -126,7 +126,7 @@ class GlobalTrackComponent extends PureComponent<Props> {
           );
         }
         return (
-          <TimelineTrackThread
+          <TrackThread
             threadsKey={mainThreadIndex}
             showMemoryMarkers={!processesWithMemoryTrack.has(globalTrack.pid)}
             trackType="expanded"
@@ -136,9 +136,7 @@ class GlobalTrackComponent extends PureComponent<Props> {
       }
       case 'screenshots': {
         const { threadIndex, id } = globalTrack;
-        return (
-          <TimelineTrackScreenshots threadIndex={threadIndex} windowId={id} />
-        );
+        return <TrackScreenshots threadIndex={threadIndex} windowId={id} />;
       }
       case 'visual-progress': {
         if (!progressGraphData) {
@@ -199,7 +197,7 @@ class GlobalTrackComponent extends PureComponent<Props> {
         onChangeOrder={this._changeLocalTrackOrder}
       >
         {localTracks.map((localTrack, trackIndex) => (
-          <TimelineLocalTrack
+          <LocalTrackComponent
             key={trackIndex}
             pid={pid}
             localTrack={localTrack}
@@ -296,7 +294,11 @@ class GlobalTrackComponent extends PureComponent<Props> {
 const EMPTY_TRACK_ORDER = [];
 const EMPTY_LOCAL_TRACKS = [];
 
-export default explicitConnect<OwnProps, StateProps, DispatchProps>({
+export const GlobalTrackComponent = explicitConnect<
+  OwnProps,
+  StateProps,
+  DispatchProps
+>({
   mapStateToProps: (state, { trackIndex }) => {
     const globalTracks = getGlobalTracks(state);
     const globalTrack = globalTracks[trackIndex];
@@ -366,5 +368,5 @@ export default explicitConnect<OwnProps, StateProps, DispatchProps>({
     changeLocalTrackOrder,
     selectTrack,
   },
-  component: GlobalTrackComponent,
+  component: GlobalTrackComponentImpl,
 });

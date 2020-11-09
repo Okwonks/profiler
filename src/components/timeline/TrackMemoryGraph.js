@@ -16,7 +16,7 @@ import {
 import { getThreadSelectors } from '../../selectors/per-thread';
 import { ORANGE_50 } from 'photon-colors';
 import { Tooltip } from '../tooltip/Tooltip';
-import EmptyThreadIndicator from './EmptyThreadIndicator';
+import { EmptyThreadIndicator } from './EmptyThreadIndicator';
 import bisection from 'bisection';
 
 import type {

@@ -23,9 +23,9 @@ import {
   getCounterSelectors,
 } from '../../selectors/profile';
 import { getThreadSelectors } from '../../selectors/per-thread';
-import TrackThread from './TrackThread';
+import { TrackThread } from './TrackThread';
 import { TrackEventDelay } from './TrackEventDelay';
-import TrackNetwork from './TrackNetwork';
+import { TrackNetwork } from './TrackNetwork';
 import { TrackMemory } from './TrackMemory';
 import { TrackIPC } from './TrackIPC';
 import { getTrackSelectionModifier } from '../../utils';
@@ -60,7 +60,7 @@ type DispatchProps = {|
 
 type Props = ConnectedProps<OwnProps, StateProps, DispatchProps>;
 
-class LocalTrackComponent extends PureComponent<Props> {
+class LocalTrackComponentImpl extends PureComponent<Props> {
   _onLabelMouseDown = (event: MouseEvent) => {
     if (event.button === 2) {
       // Notify the redux store that this was right clicked.
@@ -159,7 +159,11 @@ class LocalTrackComponent extends PureComponent<Props> {
   }
 }
 
-export default explicitConnect<OwnProps, StateProps, DispatchProps>({
+export const LocalTrackComponent = explicitConnect<
+  OwnProps,
+  StateProps,
+  DispatchProps
+>({
   mapStateToProps: (state, { pid, localTrack, trackIndex }) => {
     // These get assigned based on the track type.
     let titleText = null;
@@ -230,5 +234,5 @@ export default explicitConnect<OwnProps, StateProps, DispatchProps>({
     changeRightClickedTrack,
     selectTrack,
   },
-  component: LocalTrackComponent,
+  component: LocalTrackComponentImpl,
 });
